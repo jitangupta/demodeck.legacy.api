@@ -3,8 +3,7 @@
 *.user
 *.suo
 
-# Build results
-bin/
+# Object files (not needed, bin/ is needed)
 obj/
 
 # NuGet packages (restored during build)
