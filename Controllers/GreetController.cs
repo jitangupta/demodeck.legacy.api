@@ -1,31 +1,32 @@
 using System;
+using System.Configuration;
 using System.Web.Http;
 
 namespace Demodeck.Legacy.Api.Controllers
 {
-    [RoutePrefix("api/greet")]
+    /// <summary>
+    /// Greeting endpoint for demo purposes
+    /// </summary>
     public class GreetController : ApiController
     {
-        [HttpGet]
-        [Route("")]
+        // GET api/greet
         public IHttpActionResult Get()
         {
             return Ok(new
             {
                 message = "Hello from legacy app",
-                timestamp = DateTime.UtcNow.ToString("o"),
+                timestamp = DateTime.UtcNow,
                 source = "Demodeck.Legacy.Api (.NET Framework 4.8)"
             });
         }
 
-        [HttpGet]
-        [Route("{name}")]
-        public IHttpActionResult Get(string name)
+        // GET api/greet/{name}
+        public IHttpActionResult Get(string id)
         {
             return Ok(new
             {
-                message = $"Hello {name} from legacy app",
-                timestamp = DateTime.UtcNow.ToString("o"),
+                message = $"Hello {id}, from legacy app",
+                timestamp = DateTime.UtcNow,
                 source = "Demodeck.Legacy.Api (.NET Framework 4.8)"
             });
         }

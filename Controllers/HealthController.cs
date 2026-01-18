@@ -4,17 +4,26 @@ using System.Web.Http;
 
 namespace Demodeck.Legacy.Api.Controllers
 {
-    [RoutePrefix("api/health")]
+    /// <summary>
+    /// Health check endpoint for Kubernetes liveness and readiness probes
+    /// </summary>
     public class HealthController : ApiController
     {
-        [HttpGet]
-        [Route("")]
+        // GET api/health
         public IHttpActionResult Get()
         {
-            // Get values from config, with environment variable override support
-            var serviceName = GetConfigValue("ServiceName", "Demodeck.Legacy.Api");
-            var version = GetConfigValue("Version", "1.0.0");
-            var environment = GetConfigValue("Environment", "Production");
+            // Read from environment variables first, fallback to AppSettings
+            var serviceName = Environment.GetEnvironmentVariable("AppSettings__ServiceName")
+                ?? ConfigurationManager.AppSettings["ServiceName"]
+                ?? "Demodeck.Legacy.Api";
+
+            var version = Environment.GetEnvironmentVariable("AppSettings__Version")
+                ?? ConfigurationManager.AppSettings["Version"]
+                ?? "1.0.0";
+
+            var environment = Environment.GetEnvironmentVariable("AppSettings__Environment")
+                ?? ConfigurationManager.AppSettings["Environment"]
+                ?? "Development";
 
             return Ok(new
             {
@@ -22,41 +31,9 @@ namespace Demodeck.Legacy.Api.Controllers
                 service = serviceName,
                 version = version,
                 environment = environment,
-                timestamp = DateTime.UtcNow.ToString("o"),
-                machineName = Environment.MachineName,
-                osVersion = Environment.OSVersion.ToString(),
-                platform = "Windows"
+                timestamp = DateTime.UtcNow,
+                machineName = Environment.MachineName
             });
-        }
-
-        private string GetConfigValue(string key, string defaultValue)
-        {
-            // First try environment variable (Kubernetes standard format with double underscore)
-            var envKey = $"AppSettings__{key}";
-            var envValue = Environment.GetEnvironmentVariable(envKey);
-            if (!string.IsNullOrEmpty(envValue))
-            {
-                return envValue;
-            }
-
-            // Also try single underscore format
-            envKey = $"AppSettings_{key}";
-            envValue = Environment.GetEnvironmentVariable(envKey);
-            if (!string.IsNullOrEmpty(envValue))
-            {
-                return envValue;
-            }
-
-            // Also try direct key name
-            envValue = Environment.GetEnvironmentVariable(key);
-            if (!string.IsNullOrEmpty(envValue))
-            {
-                return envValue;
-            }
-
-            // Fall back to Web.config
-            var configValue = ConfigurationManager.AppSettings[key];
-            return !string.IsNullOrEmpty(configValue) ? configValue : defaultValue;
         }
     }
 }

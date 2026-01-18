@@ -5,12 +5,11 @@ FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2022
 WORKDIR /inetpub/wwwroot
 
 # Copy published application
-# Build the app first: msbuild /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
-COPY ./bin/ ./bin/
-COPY ./Web.config ./
-COPY ./Global.asax ./
+# Build first in Visual Studio: Build > Publish > Folder Profile
+# Or use: msbuild /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+COPY ./publish/ .
 
-# Set environment variables (can be overridden at runtime)
+# Set environment variables (can be overridden at runtime via -e or Kubernetes env)
 ENV AppSettings__ServiceName="Demodeck.Legacy.Api"
 ENV AppSettings__Version="1.0.0"
 ENV AppSettings__Environment="Production"

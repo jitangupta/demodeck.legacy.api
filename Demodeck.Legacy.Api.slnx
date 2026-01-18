@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/deployments/">
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="Demodeck.Legacy.Api.csproj" Id="ce520963-c9c3-40c4-b42c-8eae95f1c59d" />
+</Solution>
