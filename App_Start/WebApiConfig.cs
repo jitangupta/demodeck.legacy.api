@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
+using Demodeck.Legacy.Api.Infrastructure;
 
 namespace Demodeck.Legacy.Api
 {
@@ -9,6 +7,9 @@ namespace Demodeck.Legacy.Api
     {
         public static void Register(HttpConfiguration config)
         {
+            // Register global exception filter for structured logging
+            config.Filters.Add(new GlobalExceptionFilter());
+
             // Web API configuration and services
 
             // Web API routes

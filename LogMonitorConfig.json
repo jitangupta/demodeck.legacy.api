@@ -1,0 +1,24 @@
+{
+  "LogConfig": {
+    "sources": [
+      {
+        "type": "EventLog",
+        "startAtOldestRecord": false,
+        "eventFormatMultiLine": false,
+        "channels": [
+          {
+            "name": "application",
+            "level": "Warning",
+            "eventId": "!1000"
+          }
+        ]
+      },
+      {
+        "type": "File",
+        "directory": "c:\\inetpub\\logs\\LogFiles",
+        "filter": "*.log",
+        "includeSubdirectories": true
+      }
+    ]
+  }
+}
